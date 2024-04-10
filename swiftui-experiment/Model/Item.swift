@@ -10,10 +10,12 @@ import SwiftData
 
 @Model
 final class Item: ObservableObject {
+    let id: UUID
     var timestamp: Date
     var items: [InnerItem] = []
     
     init(timestamp: Date) {
+        self.id = UUID()
         self.timestamp = timestamp
     }
 }

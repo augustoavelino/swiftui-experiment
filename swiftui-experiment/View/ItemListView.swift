@@ -13,19 +13,16 @@ struct ItemListView: View {
     @Query(sort: [SortDescriptor<Item>(\.timestamp)]) private var items: [Item]
 
     var body: some View {
-        NavigationSplitView {
+        NavigationStack {
             List {
-                Section {
-                    ForEach(items) { item in
-                        NavigationLink(value: item) {
-                            Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                        }
+                ForEach(items) { item in
+                    NavigationLink(value: item) {
+                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
                     }
-                    .onDelete(perform: deleteItems)
-                } header: {
-                    Text("Items")
                 }
+                .onDelete(perform: deleteItems)
             }
+            .navigationTitle("List")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -37,10 +34,9 @@ struct ItemListView: View {
                 }
             }
             .navigationDestination(for: Item.self) { item in
-                ItemDetailView(item: item)
+                ItemDetailView()
+                    .environmentObject(item)
             }
-        } detail: {
-            Text("Select an item")
         }
     }
 

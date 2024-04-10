@@ -38,6 +38,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6548C64F2BC71DD4006969D3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				659118D72BC6CC190028590E /* Item.swift */,
+				659118E32BC6D3B80028590E /* InnerItem.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6548C6502BC71DE6006969D3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				659118D52BC6CC190028590E /* ItemListView.swift */,
+				659118E52BC6D40A0028590E /* ItemDetailView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		659118C72BC6CC190028590E = {
 			isa = PBXGroup;
 			children = (
@@ -58,11 +76,9 @@
 			isa = PBXGroup;
 			children = (
 				659118D32BC6CC190028590E /* swiftui_experimentApp.swift */,
-				659118D52BC6CC190028590E /* ItemListView.swift */,
-				659118E52BC6D40A0028590E /* ItemDetailView.swift */,
-				659118D72BC6CC190028590E /* Item.swift */,
-				659118E32BC6D3B80028590E /* InnerItem.swift */,
 				659118D92BC6CC1A0028590E /* Assets.xcassets */,
+				6548C64F2BC71DD4006969D3 /* Model */,
+				6548C6502BC71DE6006969D3 /* View */,
 				659118DB2BC6CC1A0028590E /* Preview Content */,
 			);
 			path = "swiftui-experiment";

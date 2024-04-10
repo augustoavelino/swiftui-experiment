@@ -8,26 +8,27 @@
 import SwiftUI
 import SwiftData
 
+typealias TextFieldAlertState = (isShowing: Bool, text: String)
+
 struct ItemDetailView: View {
     @Environment(\.modelContext) private var modelContext
-    @StateObject var item: Item
-    @State var newText = ""
-    @State var editText = ""
-    @State var itemToEdit: InnerItem?
-    @State var isPresentingNewAlert = false
-    @State var isPresentingEditAlert = false
+    @EnvironmentObject var item: Item
+    @State private var newItemAlertState: TextFieldAlertState = (false, "")
+    @State private var editItemAlertState: TextFieldAlertState = (false, "")
+    @State private var itemToEdit: InnerItem?
     
     var body: some View {
         VStack {
             Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                .padding(.bottom)
             List {
                 ForEach(item.items) { innerItem in
                     Text(innerItem.text)
                         .swipeActions(edge: .leading) {
                             Button("Rename") {
                                 itemToEdit = innerItem
-                                editText = innerItem.text
-                                isPresentingEditAlert = true
+                                editItemAlertState.text = innerItem.text
+                                editItemAlertState.isShowing = true
                             }
                             .tint(.blue)
                         }
@@ -37,55 +38,55 @@ struct ItemDetailView: View {
             Button(action: updateTimestamp) {
                 Text("Update Timestamp")
             }
+            .padding()
         }
-        .padding(.top)
-        .navigationTitle("Current Item")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Details")
         .toolbar {
             Button("Add Item") {
-                newText = ""
-                isPresentingNewAlert = true
+                newItemAlertState = (true, "")
             }
         }
-        .alert("New Item", isPresented: $isPresentingNewAlert) {
-            TextField("Text", text: $newText)
+        .alert("New Item", isPresented: $newItemAlertState.isShowing) {
+            TextField("Text", text: $newItemAlertState.text)
             Button("Add") {
-                addInnerItem(withText: newText)
-                isPresentingNewAlert = false
+                addInnerItem(withText: newItemAlertState.text)
+                newItemAlertState.isShowing = false
             }
             Button("Cancel", role: .cancel) {
-                isPresentingNewAlert = false
+                newItemAlertState.isShowing = false
             }
         }
-        .alert("Update Item", isPresented: $isPresentingEditAlert) {
-            TextField("New Text", text: $editText)
+        .alert("Update Item", isPresented: $editItemAlertState.isShowing) {
+            TextField("New Text", text: $editItemAlertState.text)
             Button("Confirm") {
-                updateItem(text: editText)
-                isPresentingEditAlert = false
+                updateItem(text: editItemAlertState.text)
+                editItemAlertState.isShowing = false
             }
             Button("Cancel", role: .cancel) {
-                isPresentingEditAlert = false
+                editItemAlertState.isShowing = false
             }
         }
     }
     
-    func updateTimestamp() {
+    private func updateTimestamp() {
         item.timestamp = Date()
     }
     
-    func addInnerItem(withText text: String) {
+    private func addInnerItem(withText text: String) {
         let innerItem = InnerItem(id: UUID(), text: text)
         withAnimation {
             item.items.append(innerItem)
         }
     }
     
-    func updateItem(text: String) {
+    private func updateItem(text: String) {
         guard let innerItem = itemToEdit,
             let itemIndex = item.items.firstIndex(where: { $0.id == innerItem.id }) else { return }
         item.items[itemIndex].text = text
     }
     
-    func deleteItems(at offsets: IndexSet) {
+    private func deleteItems(at offsets: IndexSet) {
         withAnimation {
             item.items.remove(atOffsets: offsets)            
         }
@@ -95,7 +96,8 @@ struct ItemDetailView: View {
 #Preview {
     let item = Item(timestamp: Date())
     return NavigationStack {
-        ItemDetailView(item: item)
+        ItemDetailView()
             .modelContainer(for: Item.self, inMemory: true)
+            .environmentObject(item)
     }
 }
