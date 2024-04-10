@@ -11,8 +11,11 @@ import SwiftData
 struct ItemDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject var item: Item
-    @State var chosenText = ""
-    @State var isPresentingAlert = false
+    @State var newText = ""
+    @State var editText = ""
+    @State var itemToEdit: InnerItem?
+    @State var isPresentingNewAlert = false
+    @State var isPresentingEditAlert = false
     
     var body: some View {
         VStack {
@@ -20,28 +23,47 @@ struct ItemDetailView: View {
             List {
                 ForEach(item.items) { innerItem in
                     Text(innerItem.text)
+                        .swipeActions(edge: .leading) {
+                            Button("Rename") {
+                                itemToEdit = innerItem
+                                editText = innerItem.text
+                                isPresentingEditAlert = true
+                            }
+                            .tint(.blue)
+                        }
                 }
+                .onDelete(perform: deleteItems(at:))
             }
-            Button(action: updateTimestamp, label: {
+            Button(action: updateTimestamp) {
                 Text("Update Timestamp")
-            })
+            }
         }
         .padding(.top)
         .navigationTitle("Current Item")
         .toolbar {
             Button("Add Item") {
-                chosenText = ""
-                isPresentingAlert = true
+                newText = ""
+                isPresentingNewAlert = true
             }
-            .alert("New Item", isPresented: $isPresentingAlert) {
-                TextField("Text", text: $chosenText)
-                Button("Add") {
-                    addInnerItem(withText: chosenText)
-                    isPresentingAlert = false
-                }
-                Button("Cancel", role: .cancel) {
-                    isPresentingAlert = false
-                }
+        }
+        .alert("New Item", isPresented: $isPresentingNewAlert) {
+            TextField("Text", text: $newText)
+            Button("Add") {
+                addInnerItem(withText: newText)
+                isPresentingNewAlert = false
+            }
+            Button("Cancel", role: .cancel) {
+                isPresentingNewAlert = false
+            }
+        }
+        .alert("Update Item", isPresented: $isPresentingEditAlert) {
+            TextField("New Text", text: $editText)
+            Button("Confirm") {
+                updateItem(text: editText)
+                isPresentingEditAlert = false
+            }
+            Button("Cancel", role: .cancel) {
+                isPresentingEditAlert = false
             }
         }
     }
@@ -52,7 +74,21 @@ struct ItemDetailView: View {
     
     func addInnerItem(withText text: String) {
         let innerItem = InnerItem(id: UUID(), text: text)
-        item.items.append(innerItem)
+        withAnimation {
+            item.items.append(innerItem)
+        }
+    }
+    
+    func updateItem(text: String) {
+        guard let innerItem = itemToEdit,
+            let itemIndex = item.items.firstIndex(where: { $0.id == innerItem.id }) else { return }
+        item.items[itemIndex].text = text
+    }
+    
+    func deleteItems(at offsets: IndexSet) {
+        withAnimation {
+            item.items.remove(atOffsets: offsets)            
+        }
     }
 }
 
