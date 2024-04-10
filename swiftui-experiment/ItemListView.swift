@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  ItemListView.swift
 //  swiftui-experiment
 //
 //  Created by Augusto Avelino on 10/04/24.
@@ -8,21 +8,23 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct ItemListView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query(sort: [SortDescriptor<Item>(\.timestamp)]) private var items: [Item]
 
     var body: some View {
         NavigationSplitView {
             List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                Section {
+                    ForEach(items) { item in
+                        NavigationLink(value: item) {
+                            Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        }
                     }
+                    .onDelete(perform: deleteItems)
+                } header: {
+                    Text("Items")
                 }
-                .onDelete(perform: deleteItems)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -33,6 +35,9 @@ struct ContentView: View {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
+            }
+            .navigationDestination(for: Item.self) { item in
+                ItemDetailView(item: item)
             }
         } detail: {
             Text("Select an item")
@@ -56,6 +61,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ItemListView()
         .modelContainer(for: Item.self, inMemory: true)
 }

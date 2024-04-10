@@ -25,7 +25,7 @@ struct swiftui_experimentApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ItemListView()
         }
         .modelContainer(sharedModelContainer)
     }
