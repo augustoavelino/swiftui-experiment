@@ -14,7 +14,19 @@
 		659118DD2BC6CC1A0028590E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 659118DC2BC6CC1A0028590E /* Preview Assets.xcassets */; };
 		659118E42BC6D3B80028590E /* InnerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659118E32BC6D3B80028590E /* InnerItem.swift */; };
 		659118E62BC6D40A0028590E /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659118E52BC6D40A0028590E /* ItemDetailView.swift */; };
+		6591F9292BC9CFA700C1B0F0 /* Jankenpon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6591F9282BC9CFA700C1B0F0 /* Jankenpon.swift */; };
+		6591F9382BC9D69000C1B0F0 /* JankenponTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6591F9372BC9D69000C1B0F0 /* JankenponTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6591F9322BC9D67A00C1B0F0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 659118C82BC6CC190028590E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 659118CF2BC6CC190028590E;
+			remoteInfo = "swiftui-experiment";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		659118D02BC6CC190028590E /* swiftui-experiment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swiftui-experiment.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -25,10 +37,20 @@
 		659118DC2BC6CC1A0028590E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		659118E32BC6D3B80028590E /* InnerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerItem.swift; sourceTree = "<group>"; };
 		659118E52BC6D40A0028590E /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
+		6591F9282BC9CFA700C1B0F0 /* Jankenpon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jankenpon.swift; sourceTree = "<group>"; };
+		6591F92E2BC9D67A00C1B0F0 /* swiftui-experimentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swiftui-experimentTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6591F9372BC9D69000C1B0F0 /* JankenponTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JankenponTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		659118CD2BC6CC190028590E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6591F92B2BC9D67A00C1B0F0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -60,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				659118D22BC6CC190028590E /* swiftui-experiment */,
+				6591F92F2BC9D67A00C1B0F0 /* swiftui-experimentTests */,
 				659118D12BC6CC190028590E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				659118D02BC6CC190028590E /* swiftui-experiment.app */,
+				6591F92E2BC9D67A00C1B0F0 /* swiftui-experimentTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -77,8 +101,8 @@
 			children = (
 				659118D32BC6CC190028590E /* swiftui_experimentApp.swift */,
 				659118D92BC6CC1A0028590E /* Assets.xcassets */,
-				6548C64F2BC71DD4006969D3 /* Model */,
-				6548C6502BC71DE6006969D3 /* View */,
+				6591F9262BC9CE9C00C1B0F0 /* Lists */,
+				6591F9272BC9CEA400C1B0F0 /* Jankenpon */,
 				659118DB2BC6CC1A0028590E /* Preview Content */,
 			);
 			path = "swiftui-experiment";
@@ -90,6 +114,31 @@
 				659118DC2BC6CC1A0028590E /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6591F9262BC9CE9C00C1B0F0 /* Lists */ = {
+			isa = PBXGroup;
+			children = (
+				6548C64F2BC71DD4006969D3 /* Model */,
+				6548C6502BC71DE6006969D3 /* View */,
+			);
+			path = Lists;
+			sourceTree = "<group>";
+		};
+		6591F9272BC9CEA400C1B0F0 /* Jankenpon */ = {
+			isa = PBXGroup;
+			children = (
+				6591F9282BC9CFA700C1B0F0 /* Jankenpon.swift */,
+			);
+			path = Jankenpon;
+			sourceTree = "<group>";
+		};
+		6591F92F2BC9D67A00C1B0F0 /* swiftui-experimentTests */ = {
+			isa = PBXGroup;
+			children = (
+				6591F9372BC9D69000C1B0F0 /* JankenponTests.swift */,
+			);
+			path = "swiftui-experimentTests";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +161,24 @@
 			productReference = 659118D02BC6CC190028590E /* swiftui-experiment.app */;
 			productType = "com.apple.product-type.application";
 		};
+		6591F92D2BC9D67A00C1B0F0 /* swiftui-experimentTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6591F9342BC9D67A00C1B0F0 /* Build configuration list for PBXNativeTarget "swiftui-experimentTests" */;
+			buildPhases = (
+				6591F92A2BC9D67A00C1B0F0 /* Sources */,
+				6591F92B2BC9D67A00C1B0F0 /* Frameworks */,
+				6591F92C2BC9D67A00C1B0F0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6591F9332BC9D67A00C1B0F0 /* PBXTargetDependency */,
+			);
+			name = "swiftui-experimentTests";
+			productName = "swiftui-experimentTests";
+			productReference = 6591F92E2BC9D67A00C1B0F0 /* swiftui-experimentTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -124,6 +191,11 @@
 				TargetAttributes = {
 					659118CF2BC6CC190028590E = {
 						CreatedOnToolsVersion = 15.3;
+					};
+					6591F92D2BC9D67A00C1B0F0 = {
+						CreatedOnToolsVersion = 15.3;
+						LastSwiftMigration = 1530;
+						TestTargetID = 659118CF2BC6CC190028590E;
 					};
 				};
 			};
@@ -141,6 +213,7 @@
 			projectRoot = "";
 			targets = (
 				659118CF2BC6CC190028590E /* swiftui-experiment */,
+				6591F92D2BC9D67A00C1B0F0 /* swiftui-experimentTests */,
 			);
 		};
 /* End PBXProject section */
@@ -155,6 +228,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6591F92C2BC9D67A00C1B0F0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -164,13 +244,30 @@
 			files = (
 				659118E62BC6D40A0028590E /* ItemDetailView.swift in Sources */,
 				659118D62BC6CC190028590E /* ItemListView.swift in Sources */,
+				6591F9292BC9CFA700C1B0F0 /* Jankenpon.swift in Sources */,
 				659118E42BC6D3B80028590E /* InnerItem.swift in Sources */,
 				659118D82BC6CC190028590E /* Item.swift in Sources */,
 				659118D42BC6CC190028590E /* swiftui_experimentApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6591F92A2BC9D67A00C1B0F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6591F9382BC9D69000C1B0F0 /* JankenponTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6591F9332BC9D67A00C1B0F0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 659118CF2BC6CC190028590E /* swiftui-experiment */;
+			targetProxy = 6591F9322BC9D67A00C1B0F0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		659118DE2BC6CC1A0028590E /* Debug */ = {
@@ -350,6 +447,45 @@
 			};
 			name = Release;
 		};
+		6591F9352BC9D67A00C1B0F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6QJFWMSLWU;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.augustoavelino.swiftui-experimentTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/swiftui-experiment.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/swiftui-experiment";
+			};
+			name = Debug;
+		};
+		6591F9362BC9D67A00C1B0F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6QJFWMSLWU;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.augustoavelino.swiftui-experimentTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/swiftui-experiment.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/swiftui-experiment";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -367,6 +503,15 @@
 			buildConfigurations = (
 				659118E12BC6CC1A0028590E /* Debug */,
 				659118E22BC6CC1A0028590E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6591F9342BC9D67A00C1B0F0 /* Build configuration list for PBXNativeTarget "swiftui-experimentTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6591F9352BC9D67A00C1B0F0 /* Debug */,
+				6591F9362BC9D67A00C1B0F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
