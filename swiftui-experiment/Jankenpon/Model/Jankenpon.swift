@@ -8,8 +8,8 @@
 import Foundation
 
 struct Jankenpon {
-    let playerOne: Option
-    let playerTwo: Option
+    var playerOne: Option
+    var playerTwo: Option
     
     func outcome() -> Outcome {
         if playerOne == playerTwo { return .draw }
@@ -21,8 +21,10 @@ struct Jankenpon {
 // MARK: - Option
 
 extension Jankenpon {
-    enum Option: String, CaseIterable {
+    enum Option: String, CaseIterable, Identifiable, Hashable {
         case rock, paper, scissors
+        
+        var id: String { rawValue }
         
         var beats: Option {
             switch self {
