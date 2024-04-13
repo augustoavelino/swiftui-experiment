@@ -13,6 +13,8 @@ struct JankenponView: View {
     @State var currentOption: Jankenpon.Option = .rock
     @State private var shouldDisplayPlayerTwo = false
     @State private var isCountingDown = false
+    @State private var shouldAnnounceOutcome = false
+    
     @State private var audioPlayer: AVAudioPlayer?
     
     var body: some View {
@@ -21,14 +23,10 @@ struct JankenponView: View {
                 VStack {
                     if shouldDisplayPlayerTwo {
                         JankenponOptionView(option: jankenpon.playerTwo)
-                            .scaleEffect(jankenpon.outcome() == .playerTwo ? 1.5 : 1.0, anchor: .top)
+                            .rotationEffect(Angle(radians: .pi))
+                            .scaleEffect(scaleForOutcome(player: .playerTwo), anchor: .top)
                     } else {
-                        Image(systemName: "questionmark")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 120, height: 120)
-                            .foregroundStyle(Color(red: 0.9, green: 0.43, blue: 0.31))
-                            .padding()
+                        hiddenPlayerTwoView
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -37,7 +35,8 @@ struct JankenponView: View {
                     JankenponSelectionView(currentOption: $currentOption)
                         .frame(maxHeight: .infinity)
                         .padding(.top, 36)
-                        .scaleEffect((shouldDisplayPlayerTwo && jankenpon.outcome() == .playerOne) ? 1.5 : 1.0, anchor: .bottom)
+                        .scaleEffect(scaleForOutcome(player: .playerOne), anchor: .bottom)
+                        .scrollDisabled(isCountingDown || shouldDisplayPlayerTwo)
                     if shouldDisplayPlayerTwo || isCountingDown {
                         Button(action: resetPlayerTwo) {
                             Text("Reset")
@@ -62,6 +61,12 @@ struct JankenponView: View {
                 jankenpon.playerOne = currentOption
             }
         }
+        .onChange(of: shouldDisplayPlayerTwo) {
+            guard shouldDisplayPlayerTwo else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                announceOutcome()
+            }
+        }
     }
     
     @ViewBuilder
@@ -71,6 +76,19 @@ struct JankenponView: View {
             revealPlayerTwo()
         }
         .foregroundStyle(.white)
+    }
+    
+    @ViewBuilder
+    private var hiddenPlayerTwoView: some View {
+        ZStack {
+            Text("☁️")
+                .font(.system(size: 280))
+            Image(systemName: "questionmark")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .foregroundStyle(Color(red: 0.9, green: 0.43, blue: 0.31))
+        }
     }
     
     private func getPlayerTwoShot() -> Jankenpon.Option {
@@ -86,6 +104,7 @@ struct JankenponView: View {
         withAnimation {
             isCountingDown = false
             shouldDisplayPlayerTwo = false
+            shouldAnnounceOutcome = false
         }
     }
     
@@ -93,8 +112,13 @@ struct JankenponView: View {
         withAnimation {
             isCountingDown = false
             shouldDisplayPlayerTwo = true
-        } completion: {
-            playSound()
+        }
+    }
+    
+    private func announceOutcome() {
+        playSound()
+        withAnimation {
+            shouldAnnounceOutcome = true
         }
     }
     
@@ -117,6 +141,14 @@ struct JankenponView: View {
         }
         
         audioPlayer?.play()
+    }
+    
+    private func scaleForOutcome(player: Jankenpon.Outcome) -> CGFloat {
+        shouldScale(player: player) ? 1.5 : 1.0
+    }
+    
+    private func shouldScale(player: Jankenpon.Outcome) -> Bool {
+        (shouldAnnounceOutcome && jankenpon.outcome() == player)
     }
 }
 
