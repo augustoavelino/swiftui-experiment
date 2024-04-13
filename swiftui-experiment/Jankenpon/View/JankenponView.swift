@@ -5,6 +5,7 @@
 //  Created by Augusto Avelino on 12/04/24.
 //
 
+import AVFoundation
 import SwiftUI
 
 struct JankenponView: View {
@@ -12,6 +13,7 @@ struct JankenponView: View {
     @State var currentOption: Jankenpon.Option = .rock
     @State private var shouldDisplayPlayerTwo = false
     @State private var isCountingDown = false
+    @State private var audioPlayer: AVAudioPlayer?
     
     var body: some View {
         ZStack {
@@ -19,7 +21,7 @@ struct JankenponView: View {
                 VStack {
                     if shouldDisplayPlayerTwo {
                         JankenponOptionView(option: jankenpon.playerTwo)
-                            .scaleEffect(jankenpon.outcome() == .playerTwo ? 1.5 : 1.0)
+                            .scaleEffect(jankenpon.outcome() == .playerTwo ? 1.5 : 1.0, anchor: .top)
                     } else {
                         Image(systemName: "questionmark")
                             .resizable()
@@ -35,7 +37,7 @@ struct JankenponView: View {
                     JankenponSelectionView(currentOption: $currentOption)
                         .frame(maxHeight: .infinity)
                         .padding(.top, 36)
-                        .scaleEffect((shouldDisplayPlayerTwo && jankenpon.outcome() == .playerOne) ? 1.5 : 1.0)
+                        .scaleEffect((shouldDisplayPlayerTwo && jankenpon.outcome() == .playerOne) ? 1.5 : 1.0, anchor: .bottom)
                     if shouldDisplayPlayerTwo || isCountingDown {
                         Button(action: resetPlayerTwo) {
                             Text("Reset")
@@ -91,7 +93,30 @@ struct JankenponView: View {
         withAnimation {
             isCountingDown = false
             shouldDisplayPlayerTwo = true
+        } completion: {
+            playSound()
         }
+    }
+    
+    private func soundForOutcome() -> String {
+        let outcome = jankenpon.outcome()
+        return switch outcome {
+        case .draw: "draw-effect"
+        case .playerOne: "win-effect"
+        case .playerTwo: "lose-effect"
+        }
+    }
+    
+    private func playSound() {
+        guard let soundURL = Bundle.main.url(forResource: soundForOutcome(), withExtension: "wav") else { return }
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+        } catch {
+            debugPrint(error)
+        }
+        
+        audioPlayer?.play()
     }
 }
 

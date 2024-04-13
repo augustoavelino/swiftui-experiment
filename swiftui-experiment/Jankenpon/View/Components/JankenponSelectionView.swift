@@ -10,13 +10,15 @@ import SwiftUI
 // MARK: View
 
 struct JankenponSelectionView: View {
+    private let coordinateSpaceName = UUID()
     private let options = Jankenpon.Option.allCases
     
-    @State private var screenWidth: CGFloat = .zero
-    @Binding var currentOption: Jankenpon.Option
-    @State private var currentIndex: Int = 0
+    private let feedbackGenerator = UISelectionFeedbackGenerator()
     
-    private let coordinateSpaceName = UUID()
+    @State private var screenWidth: CGFloat = .zero
+    @State private var currentIndex: Int = 0
+    @Binding var currentOption: Jankenpon.Option
+    
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -30,7 +32,9 @@ struct JankenponSelectionView: View {
                 Color.clear.preference(key: OffsetPreferenceKey.self, value: geometry.frame(in: .named(coordinateSpaceName)).origin.x)
             })
             .onPreferenceChange(OffsetPreferenceKey.self, perform: { offset in
-                let newIndex = Int(abs(offset) / max(1, screenWidth))
+                // Boundary needed to account for half the item's width
+                let itemBoundary = screenWidth / 2
+                let newIndex = Int((abs(offset) + itemBoundary) / max(1, screenWidth))
                 if newIndex != currentIndex {
                     currentIndex = newIndex
                 }
@@ -45,6 +49,7 @@ struct JankenponSelectionView: View {
             screenWidth = value
         })
         .onChange(of: currentIndex) {
+            feedbackGenerator.selectionChanged()
             currentOption = options[currentIndex]
         }
     }

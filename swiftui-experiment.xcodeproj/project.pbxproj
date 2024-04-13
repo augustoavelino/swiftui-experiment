@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		657EA2E92BCAC3830059BC34 /* lose-effect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 657EA2E62BCAC3830059BC34 /* lose-effect.wav */; };
+		657EA2EA2BCAC3830059BC34 /* win-effect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 657EA2E72BCAC3830059BC34 /* win-effect.wav */; };
+		657EA2EB2BCAC3830059BC34 /* draw-effect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 657EA2E82BCAC3830059BC34 /* draw-effect.wav */; };
 		659118D42BC6CC190028590E /* swiftui_experimentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659118D32BC6CC190028590E /* swiftui_experimentApp.swift */; };
 		659118D62BC6CC190028590E /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659118D52BC6CC190028590E /* ItemListView.swift */; };
 		659118D82BC6CC190028590E /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659118D72BC6CC190028590E /* Item.swift */; };
@@ -35,6 +38,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		657EA2E62BCAC3830059BC34 /* lose-effect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "lose-effect.wav"; sourceTree = "<group>"; };
+		657EA2E72BCAC3830059BC34 /* win-effect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "win-effect.wav"; sourceTree = "<group>"; };
+		657EA2E82BCAC3830059BC34 /* draw-effect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "draw-effect.wav"; sourceTree = "<group>"; };
 		659118D02BC6CC190028590E /* swiftui-experiment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swiftui-experiment.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		659118D32BC6CC190028590E /* swiftui_experimentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swiftui_experimentApp.swift; sourceTree = "<group>"; };
 		659118D52BC6CC190028590E /* ItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
@@ -90,6 +96,25 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		657EA2E42BCABFD40059BC34 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				659118D92BC6CC1A0028590E /* Assets.xcassets */,
+				657EA2E52BCABFDF0059BC34 /* Audio */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		657EA2E52BCABFDF0059BC34 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				657EA2E82BCAC3830059BC34 /* draw-effect.wav */,
+				657EA2E62BCAC3830059BC34 /* lose-effect.wav */,
+				657EA2E72BCAC3830059BC34 /* win-effect.wav */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
 		659118C72BC6CC190028590E = {
 			isa = PBXGroup;
 			children = (
@@ -112,7 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				659118D32BC6CC190028590E /* swiftui_experimentApp.swift */,
-				659118D92BC6CC1A0028590E /* Assets.xcassets */,
+				657EA2E42BCABFD40059BC34 /* Resources */,
 				6591F9262BC9CE9C00C1B0F0 /* Lists */,
 				6591F9272BC9CEA400C1B0F0 /* Jankenpon */,
 				659118DB2BC6CC1A0028590E /* Preview Content */,
@@ -273,8 +298,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				657EA2E92BCAC3830059BC34 /* lose-effect.wav in Resources */,
 				659118DD2BC6CC1A0028590E /* Preview Assets.xcassets in Resources */,
+				657EA2EA2BCAC3830059BC34 /* win-effect.wav in Resources */,
 				659118DA2BC6CC1A0028590E /* Assets.xcassets in Resources */,
+				657EA2EB2BCAC3830059BC34 /* draw-effect.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
