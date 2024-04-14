@@ -12,59 +12,75 @@ struct JankenponView: View {
     @State private var jankenpon: Jankenpon = Jankenpon(playerOne: .rock, playerTwo: .rock)
     @State var currentOption: Jankenpon.Option = .rock
     @State private var shouldDisplayPlayerTwo = false
-    @State private var isCountingDown = false
     @State private var shouldAnnounceOutcome = false
+    @State private var isCountingDown = false
+    @State private var isPresentingPeerList = false
     
     @State private var audioPlayer: AVAudioPlayer?
     
+    @EnvironmentObject var connection: JankenponConnection
+    
     var body: some View {
-        ZStack {
-            VStack(spacing: 0.0) {
-                VStack {
-                    if shouldDisplayPlayerTwo {
-                        JankenponOptionView(option: jankenpon.playerTwo)
-                            .rotationEffect(Angle(radians: .pi))
-                            .scaleEffect(scaleForOutcome(player: .playerTwo), anchor: .top)
-                    } else {
-                        hiddenPlayerTwoView
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(red: 0.91, green: 0.76, blue: 0.41))
-                VStack {
-                    JankenponSelectionView(currentOption: $currentOption)
-                        .frame(maxHeight: .infinity)
-                        .padding(.top, 36)
-                        .scaleEffect(scaleForOutcome(player: .playerOne), anchor: .bottom)
-                        .scrollDisabled(isCountingDown || shouldDisplayPlayerTwo)
-                    if shouldDisplayPlayerTwo || isCountingDown {
-                        Button(action: resetPlayerTwo) {
-                            Text("Reset")
+        NavigationStack {
+            ZStack {
+                VStack(spacing: 0.0) {
+                    VStack {
+                        if shouldDisplayPlayerTwo {
+                            JankenponOptionView(option: jankenpon.playerTwo)
+                                .rotationEffect(Angle(radians: .pi))
+                                .scaleEffect(scaleForOutcome(player: .playerTwo), anchor: .top)
+                        } else {
+                            hiddenPlayerTwoView
                         }
-                        .buttonStyle(ShrinkingButtonStyle(backgroundColor: Color(red: 0.91, green: 0.76, blue: 0.41)))
-                        .buttonBorderShape(.capsule)
-                    } else {
-                        Button(action: confirmSelection) {
-                            Text("Select")
-                        }
-                        .buttonStyle(ShrinkingButtonStyle(backgroundColor: Color(red: 0.16, green: 0.61, blue: 0.56)))
-                        .buttonBorderShape(.capsule)
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(red: 0.91, green: 0.76, blue: 0.41))
+                    VStack {
+                        JankenponSelectionView(currentOption: $currentOption)
+                            .frame(maxHeight: .infinity)
+                            .padding(.top, 36)
+                            .scaleEffect(scaleForOutcome(player: .playerOne), anchor: .bottom)
+                            .scrollDisabled(isCountingDown || shouldDisplayPlayerTwo)
+                        if shouldDisplayPlayerTwo || isCountingDown {
+                            Button(action: resetPlayerTwo) {
+                                Text("Reset")
+                            }
+                            .buttonStyle(ShrinkingButtonStyle(backgroundColor: Color(red: 0.91, green: 0.76, blue: 0.41)))
+                            .buttonBorderShape(.capsule)
+                        } else {
+                            Button(action: confirmSelection) {
+                                Text("Select")
+                            }
+                            .buttonStyle(ShrinkingButtonStyle(backgroundColor: Color(red: 0.16, green: 0.61, blue: 0.56)))
+                            .buttonBorderShape(.capsule)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(red: 0.15, green: 0.27, blue: 0.32))
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(red: 0.15, green: 0.27, blue: 0.32))
+                countdownView
             }
-            countdownView
-        }
-        .onChange(of: currentOption) {
-            withAnimation {
-                jankenpon.playerOne = currentOption
+            .toolbar {
+                Button(action: { isPresentingPeerList = true }) {
+                    Image(systemName: "list.bullet")
+                }
             }
-        }
-        .onChange(of: shouldDisplayPlayerTwo) {
-            guard shouldDisplayPlayerTwo else { return }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                announceOutcome()
+            .onChange(of: currentOption) {
+                withAnimation {
+                    jankenpon.playerOne = currentOption
+                }
+            }
+            .onChange(of: shouldDisplayPlayerTwo) {
+                guard shouldDisplayPlayerTwo else { return }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    announceOutcome()
+                }
+            }
+            .popover(isPresented: $isPresentingPeerList) {
+                NavigationStack {
+                    JankenponPeerList()
+                        .environmentObject(connection)
+                }
             }
         }
     }
@@ -154,4 +170,5 @@ struct JankenponView: View {
 
 #Preview {
     JankenponView()
+        .environmentObject(JankenponConnection())
 }

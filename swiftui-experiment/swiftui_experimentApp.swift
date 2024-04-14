@@ -28,5 +28,6 @@ struct swiftui_experimentApp: App {
             JankenponView()
         }
         .modelContainer(sharedModelContainer)
+        .environmentObject(JankenponConnection())
     }
 }
