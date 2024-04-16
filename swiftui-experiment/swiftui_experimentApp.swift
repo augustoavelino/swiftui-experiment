@@ -5,6 +5,7 @@
 //  Created by Augusto Avelino on 10/04/24.
 //
 
+import AVFoundation
 import SwiftUI
 import SwiftData
 
@@ -22,6 +23,14 @@ struct swiftui_experimentApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    
+    init() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+        } catch {
+            debugPrint(error)
+        }
+    }
 
     var body: some Scene {
         WindowGroup {
