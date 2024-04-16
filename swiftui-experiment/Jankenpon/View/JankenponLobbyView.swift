@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum JankenponLobbyAlert {
-    case rename, invite
+    case rename, invite, disconnect
 }
 
 struct JankenponLobbyView: View {
@@ -63,9 +63,19 @@ struct JankenponLobbyView: View {
                             Text(peer.peerId.displayName)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding()
+                            if connection.isPeerConnected(peer.peerId) {
+                                Spacer()
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(.green)
+                            }
                         }
                         .onTapGesture {
-                            connection.invitePeer(peer)
+                            if connection.isPeerConnected(peer.peerId) {
+                                alertType = .disconnect
+                                isPresentingAlert = true
+                            } else {
+                                connection.invitePeer(peer)
+                            }
                         }
                     }
                 } header: {
@@ -85,8 +95,8 @@ struct JankenponLobbyView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     if isEditingDisplayName {
                         Button("Save") {
-                            isPresentingAlert = true
                             alertType = .rename
+                            isPresentingAlert = true
                         }
                     } else {
                         Button("Close") {
@@ -110,12 +120,21 @@ struct JankenponLobbyView: View {
                         }),
                         secondaryButton: .cancel()
                     )
+                } else if alertType == .disconnect {
+                    return Alert(
+                        title: Text("Disconnecting"),
+                        message: Text("Are you sure you want to proceed?"),
+                        primaryButton: .destructive(Text("Disconnect"), action: {
+                            connection.disconnect()
+                        }),
+                        secondaryButton: .cancel()
+                    )
                 } else {
                     switch connection.invitationState {
                     case .received(let peerID, _):
                         return Alert(
                             title: Text("Match Invitation"),
-                            message: Text("\(peerID.displayName) wants to play a match, do you accept?"),
+                            message: Text("\(peerID.displayName) wants to play, do you accept?"),
                             primaryButton: .default(Text("Accept").foregroundStyle(.green), action: {
                                 connection.acceptInvitation()
                             }),

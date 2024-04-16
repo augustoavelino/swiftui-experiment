@@ -9,23 +9,23 @@ import AVFoundation
 import SwiftUI
 
 struct JankenponView: View {
+    @EnvironmentObject var connection: JankenponConnection
+    
     @State private var jankenpon: Jankenpon = Jankenpon(playerOne: .rock, playerTwo: .rock)
-    @State var currentOption: Jankenpon.Option = .rock
-    @State private var shouldDisplayPlayerTwo = false
-    @State private var shouldAnnounceOutcome = false
     @State private var isCountingDown = false
+    @State private var isDisplayingPlayerTwo = false
+    @State private var isAnnouncingOutcome = false
     @State private var isPresentingPeerList = false
     
     @State private var audioPlayer: AVAudioPlayer?
     
-    @EnvironmentObject var connection: JankenponConnection
     
     var body: some View {
         NavigationStack {
             ZStack {
                 VStack(spacing: 0.0) {
                     VStack {
-                        if shouldDisplayPlayerTwo {
+                        if isDisplayingPlayerTwo {
                             JankenponOptionView(option: jankenpon.playerTwo)
                                 .rotationEffect(Angle(radians: .pi))
                                 .scaleEffect(scaleForOutcome(player: .playerTwo), anchor: .top)
@@ -36,12 +36,12 @@ struct JankenponView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(red: 0.91, green: 0.76, blue: 0.41))
                     VStack {
-                        JankenponSelectionView(currentOption: $currentOption)
+                        JankenponSelectionView(currentOption: $jankenpon.playerOne)
                             .frame(maxHeight: .infinity)
                             .padding(.top, 36)
                             .scaleEffect(scaleForOutcome(player: .playerOne), anchor: .bottom)
-                            .scrollDisabled(isCountingDown || shouldDisplayPlayerTwo)
-                        if shouldDisplayPlayerTwo || isCountingDown {
+                            .scrollDisabled(isCountingDown || isDisplayingPlayerTwo)
+                        if isDisplayingPlayerTwo || isCountingDown {
                             Button(action: resetPlayerTwo) {
                                 Text("Reset")
                             }
@@ -65,13 +65,8 @@ struct JankenponView: View {
                     Image(systemName: "list.bullet")
                 }
             }
-            .onChange(of: currentOption) {
-                withAnimation {
-                    jankenpon.playerOne = currentOption
-                }
-            }
-            .onChange(of: shouldDisplayPlayerTwo) {
-                guard shouldDisplayPlayerTwo else { return }
+            .onChange(of: isDisplayingPlayerTwo) {
+                guard isDisplayingPlayerTwo else { return }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     announceOutcome()
                 }
@@ -88,7 +83,6 @@ struct JankenponView: View {
     @ViewBuilder
     private var countdownView: some View {
         JankenponCountdownView(shouldStart: $isCountingDown) {
-            jankenpon.playerTwo = getPlayerTwoShot()
             revealPlayerTwo()
         }
         .foregroundStyle(.white)
@@ -108,33 +102,41 @@ struct JankenponView: View {
     }
     
     private func getPlayerTwoShot() -> Jankenpon.Option {
+        if connection.isPaired, let opponentOption = connection.opponentOption {
+            return opponentOption
+        }
         var options = Jankenpon.Option.allCases.shuffled()
         return options.removeLast()
     }
     
     private func confirmSelection() {
-        isCountingDown = true
+        if connection.isPaired {
+            connection.sendOption(jankenpon.playerOne)
+        } else {
+            isCountingDown = true
+        }
     }
     
     private func resetPlayerTwo() {
         withAnimation {
             isCountingDown = false
-            shouldDisplayPlayerTwo = false
-            shouldAnnounceOutcome = false
+            isDisplayingPlayerTwo = false
+            isAnnouncingOutcome = false
         }
     }
     
     private func revealPlayerTwo() {
+        jankenpon.playerTwo = getPlayerTwoShot()
         withAnimation {
             isCountingDown = false
-            shouldDisplayPlayerTwo = true
+            isDisplayingPlayerTwo = true
         }
     }
     
     private func announceOutcome() {
         playSound()
         withAnimation {
-            shouldAnnounceOutcome = true
+            isAnnouncingOutcome = true
         }
     }
     
@@ -164,7 +166,7 @@ struct JankenponView: View {
     }
     
     private func shouldScale(player: Jankenpon.Outcome) -> Bool {
-        (shouldAnnounceOutcome && jankenpon.outcome() == player)
+        (isAnnouncingOutcome && jankenpon.outcome() == player)
     }
 }
 

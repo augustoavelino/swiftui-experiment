@@ -25,6 +25,9 @@ class JankenponConnection: NSObject, ObservableObject {
     
     @Published var peers: [PeerDevice] = []
     @Published var receivedInvite = false
+    @Published var isPaired = false
+    private var isHost = false
+    private(set) var opponentOption: Jankenpon.Option?
     private(set) var invitationState: InvitationState = .idle
     private var invitationHandler: ((Bool, MCSession?) -> Void)?
     
@@ -34,6 +37,7 @@ class JankenponConnection: NSObject, ObservableObject {
         advertiser = MCNearbyServiceAdvertiser(peer: peer, discoveryInfo: nil, serviceType: serviceType)
         browser = MCNearbyServiceBrowser(peer: peer, serviceType: serviceType)
         super.init()
+        session.delegate = self
         advertiser.delegate = self
         browser.delegate = self
     }
@@ -52,15 +56,11 @@ class JankenponConnection: NSObject, ObservableObject {
         peers.removeAll()
     }
     
-    func invitePeer(_ peer: PeerDevice) {
-        print("INVITING \(peer.peerId)")
-        browser.invitePeer(peer.peerId, to: session, withContext: nil, timeout: 60.0)
-    }
-    
     private func reloadCurrentPeer() {
         invalidateCurrentPeer()
         let peer = Self.getCurrentID()
         session = MCSession(peer: peer)
+        session.delegate = self
         advertiser = MCNearbyServiceAdvertiser(peer: peer, discoveryInfo: nil, serviceType: serviceType)
         advertiser.delegate = self
         browser = MCNearbyServiceBrowser(peer: peer, serviceType: serviceType)
@@ -72,14 +72,14 @@ class JankenponConnection: NSObject, ObservableObject {
     }
     
     private func invalidateCurrentPeer() {
+        peers.removeAll()
         advertiser.stopAdvertisingPeer()
         browser.stopBrowsingForPeers()
         session.disconnect()
-        peers.removeAll()
     }
     
     private static func getCurrentID() -> MCPeerID {
-        if let storedDisplayName = UserDefaults.standard.string(forKey: "display-name"), 
+        if let storedDisplayName = UserDefaults.standard.string(forKey: "display-name"),
             !storedDisplayName.isEmpty {
             MCPeerID(displayName: storedDisplayName)
         } else {
@@ -87,14 +87,53 @@ class JankenponConnection: NSObject, ObservableObject {
         }
     }
     
+    func invitePeer(_ peer: PeerDevice) {
+        guard !isPaired else { return }
+        isHost = true
+        print("INVITING \(peer.peerId)")
+        browser.invitePeer(peer.peerId, to: session, withContext: nil, timeout: 60.0)
+    }
+    
     func acceptInvitation() {
         invitationHandler?(true, session)
         invitationState = .idle
+        isPaired = true
     }
     
     func rejectInvitation() {
         invitationHandler?(false, session)
         invitationState = .idle
+        isPaired = false
+    }
+    
+    func disconnect() {
+        if isHost, let disconnectRequest = "disconnect-request".data(using: .utf8) {
+            do {
+                try session.send(disconnectRequest, toPeers: session.connectedPeers, with: .reliable)
+            } catch {
+                print("DISCONNECT REQUEST ERROR")
+                debugPrint(error)
+            }
+        } else {
+            session.disconnect()
+        }
+        isPaired = false
+    }
+    
+    func sendOption(_ option: Jankenpon.Option) {
+        guard let optionData = option.rawValue.data(using: .utf8) else {
+            return print("COULD NOT CONVERT \(option) TO DATA")
+        }
+        do {
+            try session.send(optionData, toPeers: session.connectedPeers, with: .reliable)
+        } catch {
+            print("ERROR SENDING OPTION \(option)")
+            debugPrint(error)
+        }
+    }
+    
+    func isPeerConnected(_ peerID: MCPeerID) -> Bool {
+        return session.connectedPeers.contains(peerID)
     }
 }
 
@@ -102,12 +141,21 @@ class JankenponConnection: NSObject, ObservableObject {
 
 extension JankenponConnection: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        print("")
+        print("\(peerID.displayName) DID CHANGE STATE TO \(state)")
+        isPaired = state == .connected
+        if state == .notConnected {
+            isHost = false
+        }
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         if let stringData = String(data: data, encoding: .utf8) {
-            print("Received \(stringData) from \(peerID.displayName)")
+            if stringData == "disconnect-request" {
+                session.disconnect()
+            } else if let receivedOption = Jankenpon.Option(rawValue: stringData) {
+                opponentOption = receivedOption
+                print("Received \(receivedOption) from \(peerID.displayName)")
+            }
         } else {
             print("Received non-string data from \(peerID.displayName)")
         }
