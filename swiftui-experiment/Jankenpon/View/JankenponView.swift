@@ -78,7 +78,7 @@ struct JankenponView: View {
             }
             .popover(isPresented: $isPresentingPeerList) {
                 NavigationStack {
-                    JankenponPeerList()
+                    JankenponLobbyView()
                         .environmentObject(connection)
                 }
             }

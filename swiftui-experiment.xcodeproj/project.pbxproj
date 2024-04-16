@@ -26,7 +26,7 @@
 		6591F9452BCA01D300C1B0F0 /* JankenponOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6591F9442BCA01D300C1B0F0 /* JankenponOptionView.swift */; };
 		6591F9472BCA029400C1B0F0 /* JankenponOptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6591F9462BCA029400C1B0F0 /* JankenponOptionTests.swift */; };
 		65CCB9602BCB356300CB38D9 /* JankenponConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CCB95F2BCB356300CB38D9 /* JankenponConnection.swift */; };
-		65CCB9682BCB44B000CB38D9 /* JankenponPeerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CCB9672BCB44B000CB38D9 /* JankenponPeerList.swift */; };
+		65CCB9682BCB44B000CB38D9 /* JankenponLobbyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CCB9672BCB44B000CB38D9 /* JankenponLobbyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,7 +62,7 @@
 		6591F9462BCA029400C1B0F0 /* JankenponOptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JankenponOptionTests.swift; sourceTree = "<group>"; };
 		65CCB95F2BCB356300CB38D9 /* JankenponConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JankenponConnection.swift; sourceTree = "<group>"; };
 		65CCB9612BCB366A00CB38D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		65CCB9672BCB44B000CB38D9 /* JankenponPeerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JankenponPeerList.swift; sourceTree = "<group>"; };
+		65CCB9672BCB44B000CB38D9 /* JankenponLobbyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JankenponLobbyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				6591F9392BC9DD1D00C1B0F0 /* JankenponView.swift */,
+				65CCB9672BCB44B000CB38D9 /* JankenponLobbyView.swift */,
 				6591F9482BCA066500C1B0F0 /* Components */,
 			);
 			path = View;
@@ -218,7 +219,6 @@
 			children = (
 				6591F9422BC9EDA300C1B0F0 /* JankenponCountdownView.swift */,
 				6591F9442BCA01D300C1B0F0 /* JankenponOptionView.swift */,
-				65CCB9672BCB44B000CB38D9 /* JankenponPeerList.swift */,
 				6591F93D2BC9DDC700C1B0F0 /* JankenponSelectionView.swift */,
 			);
 			path = Components;
@@ -331,7 +331,7 @@
 				6591F93A2BC9DD1D00C1B0F0 /* JankenponView.swift in Sources */,
 				659118E62BC6D40A0028590E /* ItemDetailView.swift in Sources */,
 				659118D62BC6CC190028590E /* ItemListView.swift in Sources */,
-				65CCB9682BCB44B000CB38D9 /* JankenponPeerList.swift in Sources */,
+				65CCB9682BCB44B000CB38D9 /* JankenponLobbyView.swift in Sources */,
 				6591F9452BCA01D300C1B0F0 /* JankenponOptionView.swift in Sources */,
 				6591F9432BC9EDA300C1B0F0 /* JankenponCountdownView.swift in Sources */,
 				6591F9292BC9CFA700C1B0F0 /* Jankenpon.swift in Sources */,
