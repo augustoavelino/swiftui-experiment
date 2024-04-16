@@ -23,22 +23,11 @@ struct JankenponLobbyView: View {
         HStack {
             List {
                 Section {
-                    TextField(
-                        UIDevice.current.name,
-                        text: $textFieldValue
+                    JankenponTextField(
+                        placeholder: UIDevice.current.name,
+                        text: $textFieldValue,
+                        isEditing: $isEditingDisplayName
                     )
-                    .disabled(!isEditingDisplayName)
-                    .overlay {
-                        HStack {
-                            Spacer()
-                            if isEditingDisplayName {
-                                Button(action: { textFieldValue = "" }, label: {
-                                    Image(systemName: "xmark.circle.fill")
-                                        .foregroundStyle(.secondary)
-                                })
-                            }
-                        }
-                    }
                     Toggle(isOn: $connection.isAdvertised) {
                         Text("Discoverable")
                     }
@@ -48,35 +37,16 @@ struct JankenponLobbyView: View {
                 Section {
                     if connection.peers.isEmpty {
                         VStack {
-                            Spacer()
                             Text("No players nearby")
                                 .foregroundStyle(.tertiary)
-                            Spacer()
                         }
                     }
                     ForEach(connection.peers) { peer in
-                        HStack(spacing: 0.0) {
-                            Image(systemName: "iphone")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 32, height: 32)
-                            Text(peer.peerId.displayName)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding()
-                            if connection.isPeerConnected(peer.peerId) {
-                                Spacer()
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(.green)
+                        JankenponPeerRow(
+                            peerName: peer.peerId.displayName,
+                            isPaired: connection.isPeerConnected(peer.peerId)) {
+                                didSelectPeer(peer)
                             }
-                        }
-                        .onTapGesture {
-                            if connection.isPeerConnected(peer.peerId) {
-                                alertType = .disconnect
-                                isPresentingAlert = true
-                            } else {
-                                connection.invitePeer(peer)
-                            }
-                        }
                     }
                 } header: {
                     Text("Other Players")
@@ -164,6 +134,15 @@ struct JankenponLobbyView: View {
                     isPresentingAlert = true
                 }
             }
+        }
+    }
+    
+    private func didSelectPeer(_ peer: PeerDevice) {
+        if connection.isPeerConnected(peer.peerId) {
+            alertType = .disconnect
+            isPresentingAlert = true
+        } else {
+            connection.invitePeer(peer)
         }
     }
 }

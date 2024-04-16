@@ -64,6 +64,7 @@ struct JankenponView: View {
                 Button(action: { isPresentingPeerList = true }) {
                     Image(systemName: "list.bullet")
                 }
+                .buttonStyle(ShrinkingButtonStyle(.small, backgroundColor: connection.isPaired ? .green : .blue))
             }
             .onChange(of: isDisplayingPlayerTwo) {
                 guard isDisplayingPlayerTwo else { return }
