@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		656A7E2B2BEAE33A0046EBE5 /* janken-jam.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 656A7E2A2BEAE33A0046EBE5 /* janken-jam.mp3 */; };
 		657EA2E92BCAC3830059BC34 /* lose-effect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 657EA2E62BCAC3830059BC34 /* lose-effect.wav */; };
 		657EA2EA2BCAC3830059BC34 /* win-effect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 657EA2E72BCAC3830059BC34 /* win-effect.wav */; };
 		657EA2EB2BCAC3830059BC34 /* draw-effect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 657EA2E82BCAC3830059BC34 /* draw-effect.wav */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		656A7E2A2BEAE33A0046EBE5 /* janken-jam.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "janken-jam.mp3"; sourceTree = "<group>"; };
 		657EA2E62BCAC3830059BC34 /* lose-effect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "lose-effect.wav"; sourceTree = "<group>"; };
 		657EA2E72BCAC3830059BC34 /* win-effect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "win-effect.wav"; sourceTree = "<group>"; };
 		657EA2E82BCAC3830059BC34 /* draw-effect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "draw-effect.wav"; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 		657EA2E52BCABFDF0059BC34 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				656A7E2A2BEAE33A0046EBE5 /* janken-jam.mp3 */,
 				657EA2E82BCAC3830059BC34 /* draw-effect.wav */,
 				657EA2E62BCAC3830059BC34 /* lose-effect.wav */,
 				657EA2E72BCAC3830059BC34 /* win-effect.wav */,
@@ -314,6 +317,7 @@
 			files = (
 				657EA2E92BCAC3830059BC34 /* lose-effect.wav in Resources */,
 				659118DD2BC6CC1A0028590E /* Preview Assets.xcassets in Resources */,
+				656A7E2B2BEAE33A0046EBE5 /* janken-jam.mp3 in Resources */,
 				657EA2EA2BCAC3830059BC34 /* win-effect.wav in Resources */,
 				659118DA2BC6CC1A0028590E /* Assets.xcassets in Resources */,
 				657EA2EB2BCAC3830059BC34 /* draw-effect.wav in Resources */,

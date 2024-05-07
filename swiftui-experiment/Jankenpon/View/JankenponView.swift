@@ -17,8 +17,11 @@ struct JankenponView: View {
     @State private var isAnnouncingOutcome = false
     @State private var isPresentingPeerList = false
     
-    @State private var audioPlayer: AVAudioPlayer?
+    /// Loops the background soundtrack
+    @State private var trackPlayer: AVAudioPlayer?
     
+    /// Plays the sound effects
+    @State private var sfxPlayer: AVAudioPlayer?
     
     var body: some View {
         NavigationStack {
@@ -78,6 +81,12 @@ struct JankenponView: View {
                         .environmentObject(connection)
                 }
             }
+            .onAppear {
+                playBackgroundSoundtrack()
+            }
+            .onDisappear {
+                stopBackgroundSoundtrack()
+            }
         }
     }
     
@@ -135,31 +144,51 @@ struct JankenponView: View {
     }
     
     private func announceOutcome() {
-        playSound()
+        playSFX()
         withAnimation {
             isAnnouncingOutcome = true
         }
     }
     
-    private func soundForOutcome() -> String {
+    private func playBackgroundSoundtrack() {
+        guard let soundURL = Bundle.main.url(forResource: "janken-jam", withExtension: "mp3") else { return }
+        
+        do {
+            trackPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            trackPlayer?.numberOfLoops = -1
+        } catch {
+            debugPrint(error)
+        }
+        
+        trackPlayer?.play()
+    }
+    
+    private func stopBackgroundSoundtrack() {
+        trackPlayer?.setVolume(0.0, fadeDuration: 1.0)
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 1.0) {
+            trackPlayer?.stop()
+        }
+    }
+    
+    private func playSFX() {
+        guard let soundURL = Bundle.main.url(forResource: sfxForOutcome(), withExtension: "wav") else { return }
+        
+        do {
+            sfxPlayer = try AVAudioPlayer(contentsOf: soundURL)
+        } catch {
+            debugPrint(error)
+        }
+        
+        sfxPlayer?.play()
+    }
+    
+    private func sfxForOutcome() -> String {
         let outcome = jankenpon.outcome()
         return switch outcome {
         case .draw: "draw-effect"
         case .playerOne: "win-effect"
         case .playerTwo: "lose-effect"
         }
-    }
-    
-    private func playSound() {
-        guard let soundURL = Bundle.main.url(forResource: soundForOutcome(), withExtension: "wav") else { return }
-        
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
-        } catch {
-            debugPrint(error)
-        }
-        
-        audioPlayer?.play()
     }
     
     private func scaleForOutcome(player: Jankenpon.Outcome) -> CGFloat {
