@@ -23,14 +23,6 @@ struct swiftui_experimentApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
-    
-    init() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback)
-        } catch {
-            debugPrint(error)
-        }
-    }
 
     var body: some Scene {
         WindowGroup {

@@ -17,11 +17,7 @@ struct JankenponView: View {
     @State private var isAnnouncingOutcome = false
     @State private var isPresentingPeerList = false
     
-    /// Loops the background soundtrack
-    @State private var trackPlayer: AVAudioPlayer?
-    
-    /// Plays the sound effects
-    @State private var sfxPlayer: AVAudioPlayer?
+    private let audioService = JankenponAudioService()
     
     var body: some View {
         NavigationStack {
@@ -82,10 +78,10 @@ struct JankenponView: View {
                 }
             }
             .onAppear {
-                playBackgroundSoundtrack()
+                audioService.startBackgroundSoundtrack()
             }
             .onDisappear {
-                stopBackgroundSoundtrack()
+                audioService.stopBackgroundSoundtrack()
             }
         }
     }
@@ -150,44 +146,11 @@ struct JankenponView: View {
         }
     }
     
-    private func playBackgroundSoundtrack() {
-        guard let soundURL = Bundle.main.url(forResource: "janken-jam", withExtension: "mp3") else { return }
-        
-        do {
-            trackPlayer = try AVAudioPlayer(contentsOf: soundURL)
-            trackPlayer?.numberOfLoops = -1
-        } catch {
-            debugPrint(error)
-        }
-        
-        trackPlayer?.play()
-    }
-    
-    private func stopBackgroundSoundtrack() {
-        trackPlayer?.setVolume(0.0, fadeDuration: 1.0)
-        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 1.0) {
-            trackPlayer?.stop()
-        }
-    }
-    
     private func playSFX() {
-        guard let soundURL = Bundle.main.url(forResource: sfxForOutcome(), withExtension: "wav") else { return }
-        
-        do {
-            sfxPlayer = try AVAudioPlayer(contentsOf: soundURL)
-        } catch {
-            debugPrint(error)
-        }
-        
-        sfxPlayer?.play()
-    }
-    
-    private func sfxForOutcome() -> String {
-        let outcome = jankenpon.outcome()
-        return switch outcome {
-        case .draw: "draw-effect"
-        case .playerOne: "win-effect"
-        case .playerTwo: "lose-effect"
+        return switch jankenpon.outcome() {
+        case .draw: audioService.playSFX(.draw)
+        case .playerOne: audioService.playSFX(.win)
+        case .playerTwo: audioService.playSFX(.lose)
         }
     }
     
@@ -196,7 +159,8 @@ struct JankenponView: View {
     }
     
     private func shouldScale(player: Jankenpon.Outcome) -> Bool {
-        (isAnnouncingOutcome && jankenpon.outcome() == player)
+        let outcome = jankenpon.outcome()
+        return (isAnnouncingOutcome && (outcome == player || outcome == .draw))
     }
 }
 
