@@ -5,6 +5,7 @@
 //  Created by Augusto Avelino on 10/04/24.
 //
 
+import AVFoundation
 import SwiftUI
 import SwiftData
 
@@ -28,5 +29,6 @@ struct swiftui_experimentApp: App {
             JankenponView()
         }
         .modelContainer(sharedModelContainer)
+        .environmentObject(JankenponConnection())
     }
 }
